@@ -2,7 +2,7 @@ import logging
 
 logging.basicConfig(level = logging.INFO)
 
-operation = int (input (("Podaj działanie, posługując się odpowiednią liczbą: 1 Dodawanie, 2 Odejmowanie, 3 Mnożenie, 4 Dzielenie: ")))
+operation = int (input ("Podaj działanie, posługując się odpowiednią liczbą: 1 Dodawanie, 2 Odejmowanie, 3 Mnożenie, 4 Dzielenie: "))
 x = float (input ('Podaj liczbę 1. '))
 y = float (input ('Podaj liczbę 2. '))
 if operation == 1:
