@@ -3,19 +3,19 @@ import logging
 
 logging.basicConfig(level = logging.INFO)
 
-dzialanie = int (input (("Podaj działanie, posługując się odpowiednią liczbą: 1 Dodawanie, 2 Odejmowanie, 3 Mnożenie, 4 Dzielenie: ")))
+operation = int (input (("Podaj działanie, posługując się odpowiednią liczbą: 1 Dodawanie, 2 Odejmowanie, 3 Mnożenie, 4 Dzielenie: ")))
 x = float (input ('Podaj liczbę 1. '))
 y = float (input ('Podaj liczbę 2. '))
-if dzialanie == 1:
+if operation == 1:
     logging.info ("Dodaję %s i %s" % (x, y))
     result = x + y
-elif dzialanie == 2:
+elif operation == 2:
     logging.info ("Odejmuję %s i %s" % (x, y))
     result = x - y
-elif dzialanie == 3:
+elif operation == 3:
     logging.info ("Mnożę %s i %s" % (x, y))
     result = x * y
-elif dzialanie == 4:
+elif operation == 4:
     logging.info ("Dzielę %s i %s" % (x, y))
     result = x / y
 
