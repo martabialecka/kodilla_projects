@@ -28,11 +28,22 @@ def get_items (items):
 
     return table
 
+def add_item (n, q, u, up):
+    items.append ({'name' : n, 'quantity' : q, 'unit' : u, 'unit_price' : up})
+
+
 while True:
     decision = input ("What would you like to do? ")
     if decision == 'show':
         print (get_items(items))
-    if decision == 'exit':
+    elif decision == 'add':
+        print ("Adding to warehouse")
+        name = input ("Item name: ")
+        quantity = int(input ("Item quantity: "))
+        unit = input ("Item unit of measure, f.ex. l, kg, pcs: ")
+        unit_price = float(input ("Item price in PLN: "))
+        add_item (name, quantity, unit, unit_price)  
+    elif decision == 'exit':
         print = "Exiting... Bye!"
         break
 
