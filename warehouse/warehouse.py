@@ -31,18 +31,43 @@ def get_items (items):
 def add_item (n, q, u, up):
     items.append ({'name' : n, 'quantity' : q, 'unit' : u, 'unit_price' : up})
 
+def sell_item (item_name, quantity_to_sell):
+    for item in items:
+        if item_name == item ['name']:
+            if item['quantity'] >= quantity_to_sell:
+                item ['quantity'] = item ['quantity'] - quantity_to_sell
+                return item
+            else:
+                return None
+    return None       
+       
+
+
+   #Niech ta funkcja, przeszuka listę towarów i znajdzie ten, którego nazwa zgadza się z nazwą podaną przez użytkownika. 
+    #Jeśli taki towar istnieje, zmniejsz dostępną ilość o wartość podaną przez użytkownika.
+
 
 while True:
     decision = input ("What would you like to do? ")
     if decision == 'show':
         print (get_items(items))
     elif decision == 'add':
-        print ("Adding to warehouse")
+        print ("Adding to warehouse...")
         name = input ("Item name: ")
         quantity = int(input ("Item quantity: "))
         unit = input ("Item unit of measure, f.ex. l, kg, pcs: ")
         unit_price = float(input ("Item price in PLN: "))
-        add_item (name, quantity, unit, unit_price)  
+        add_item (name, quantity, unit, unit_price)
+    elif decision == 'sell':
+        item_name = input ("Item name: ")
+        quantity_to_sell = int(input ("Quantity to sell: "))
+        item = sell_item (item_name, quantity_to_sell)
+        if item:
+            print ("Successfully sold %s %s of %s" % (quantity_to_sell, item ['unit'], item_name))
+            print (get_items(items))
+        else:
+            print ('Sell unsuccessfull')
+         
     elif decision == 'exit':
         print = "Exiting... Bye!"
         break
