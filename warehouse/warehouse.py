@@ -12,6 +12,8 @@ items = [
     'unit' : 'kg',
     "unit_price" : 2}]
 
+sold_items = []
+
 def get_items (items):
     # name:      15 
     # quantity:  12
@@ -37,16 +39,24 @@ def sell_item (item_name, quantity_to_sell):
             if item['quantity'] >= quantity_to_sell:
                 item ['quantity'] = item ['quantity'] - quantity_to_sell
                 return item
+                sold_items.append ({'name' : item_name, 'quantity' : item ['quantity'] - quantity_to_sell, 'unit' :  item ['unit'], 'unit_price' : unit_price ['unit_price']})
             else:
                 return None
-    return None       
-       
+    return None
 
+def get_costs (items):
+    costs = sum ((['quantity'] * item['unit_price']) for item in items)
+    return costs
 
-   #Niech ta funkcja, przeszuka listę towarów i znajdzie ten, którego nazwa zgadza się z nazwą podaną przez użytkownika. 
-    #Jeśli taki towar istnieje, zmniejsz dostępną ilość o wartość podaną przez użytkownika.
+def get_income (sold_items):
+    income = sum ((['quantity'] * item['unit_price']) for item in items)
+    return income
 
-
+def show_revenue (income, costs):
+    print ("----------------")
+    profit = income - costs
+    return profit
+        
 while True:
     decision = input ("What would you like to do? ")
     if decision == 'show':
@@ -67,9 +77,15 @@ while True:
             print (get_items(items))
         else:
             print ('Sell unsuccessfull')
-         
+    elif decision == 'show_revenue':
+        print (get_costs (items))
+        print (get_income (sold_items))
+        print (show_revenue (income, costs))
+        if show_revenue < 0:
+            print ("Revenue breakdown (PLN)")
+   
     elif decision == 'exit':
         print = "Exiting... Bye!"
         break
 
-
+    
