@@ -2,15 +2,15 @@ items = [
     {'name' :'chocolate',
     'quantity' : 200,
     'unit' : 'kg',
-    "unit_price" : 4},
+    "unit_price" : 4.0},
     {'name' :'sweets',
     'quantity' : 50,
     'unit' : 'kg',
-    "unit_price" : 3},
+    "unit_price" : 3.0},
     {'name' :'lollipop',
     'quantity' : 400,
     'unit' : 'kg',
-    "unit_price" : 2}]
+    "unit_price" : 2.0}]
 
 sold_items = []
 
@@ -22,40 +22,42 @@ def get_items (items):
     table =  "Name           Quantity    Unit    Unit Price (PLN)\n"
     table += "____           ________    ____    __________\n"
     for item in items:
+        unit_price_string = "%.2f" % item ['unit_price']
         table += \
             item['name'] + ' ' * (15 - len(item['name'])) + \
             str(item['quantity']) + ' ' * (12 - len(str(item['quantity']))) + \
             item['unit'] + ' ' * (8 - len(item['unit'])) + \
-            str(item ['unit_price']) + '\n'
+            unit_price_string + '\n'
 
     return table
 
-def add_item (n, q, u, up):
-    items.append ({'name' : n, 'quantity' : q, 'unit' : u, 'unit_price' : up})
+def add_item (name, quantity, unit, unit_price):
+    items.append ({'name' : name, 'quantity' : quantity, 'unit' : unit, 'unit_price' : unit_price})
 
 def sell_item (item_name, quantity_to_sell):
     for item in items:
         if item_name == item ['name']:
             if item['quantity'] >= quantity_to_sell:
                 item ['quantity'] = item ['quantity'] - quantity_to_sell
+                sold_items.append ({'name' : item_name, 'quantity' : quantity_to_sell, 'unit' :  item ['unit'], 'unit_price' : item ['unit_price']})
                 return item
-                sold_items.append ({'name' : item_name, 'quantity' : item ['quantity'] - quantity_to_sell, 'unit' :  item ['unit'], 'unit_price' : unit_price ['unit_price']})
             else:
                 return None
     return None
 
 def get_costs (items):
-    costs = sum ((['quantity'] * item['unit_price']) for item in items)
+    costs = sum ([(item['quantity'] * item['unit_price']) for item in items])
     return costs
 
 def get_income (sold_items):
-    income = sum ((['quantity'] * item['unit_price']) for item in items)
+    income = sum ([(item['quantity'] * item['unit_price']) for item in sold_items])
     return income
 
-def show_revenue (income, costs):
-    print ("----------------")
+def show_revenue (items, sold_items):
+    income = get_income (sold_items)
+    costs = get_costs (items)
     profit = income - costs
-    return profit
+    return (income, costs, profit)
         
 while True:
     decision = input ("What would you like to do? ")
@@ -73,19 +75,18 @@ while True:
         quantity_to_sell = int(input ("Quantity to sell: "))
         item = sell_item (item_name, quantity_to_sell)
         if item:
-            print ("Successfully sold %s %s of %s" % (quantity_to_sell, item ['unit'], item_name))
+            print ("Successfully sold %d %s of %s" % (quantity_to_sell, item ['unit'], item_name))
             print (get_items(items))
         else:
             print ('Sell unsuccessfull')
     elif decision == 'show_revenue':
-        print (get_costs (items))
-        print (get_income (sold_items))
-        print (show_revenue (income, costs))
-        if show_revenue < 0:
-            print ("Revenue breakdown (PLN)")
-   
+        (income, costs, profit) = show_revenue (items, sold_items)
+        print ("Revenue breakdown (PLN)")
+        print ("Income: %.2f" % income)
+        print ("Costs: %.2f" %  costs)
+        print ("-------------")
+        print ("Revenue: %.2f PLN" % profit)
     elif decision == 'exit':
         print = "Exiting... Bye!"
         break
 
-    
