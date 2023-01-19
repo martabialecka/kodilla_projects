@@ -1,3 +1,5 @@
+import csv
+
 items = [
     {'name' :'chocolate',
     'quantity' : 200,
@@ -58,6 +60,24 @@ def show_revenue (items, sold_items):
     costs = get_costs (items)
     profit = income - costs
     return (income, costs, profit)
+
+def export_items_to_csv (items):
+    with open ('magazyn.csv', 'w', newline='') as csvfile:
+        fieldnames = ['name', 'quantity', 'unit', 'unit_price']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        
+        writer.writeheader()
+        for item in items:
+            writer.writerow (item)
+
+def load_items_from_csv(items):
+    list.clear(items)
+    with open('magazyn.csv', 'r', newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        
+        for item in reader:
+            item ['unit_price'] = float(item ['unit_price'])
+            items.append(item)
         
 while True:
     decision = input ("What would you like to do? ")
@@ -86,6 +106,12 @@ while True:
         print ("Costs: %.2f" %  costs)
         print ("-------------")
         print ("Revenue: %.2f PLN" % profit)
+    elif decision == 'save':
+        print ('Successfully saved data to magazyn.csv')
+        export_items_to_csv(items)
+    elif decision == 'load':
+        print ('Successfully loaded data from magazyn.csv')
+        load_items_from_csv(items)
     elif decision == 'exit':
         print = "Exiting... Bye!"
         break
