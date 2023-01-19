@@ -1,4 +1,5 @@
 import csv
+import sys
 
 items = [
     {'name' :'chocolate',
@@ -70,15 +71,20 @@ def export_items_to_csv (items):
         for item in items:
             writer.writerow (item)
 
-def load_items_from_csv(items):
+def load_items_from_csv(items, file):
     list.clear(items)
-    with open('magazyn.csv', 'r', newline='') as csvfile:
+    with open(file, 'r', newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         
         for item in reader:
             item ['unit_price'] = float(item ['unit_price'])
             items.append(item)
-        
+
+if len(sys.argv) > 1:
+    load_items_from_csv (items, sys.argv [1])
+    print ("Successfully loaded data from %s" % sys.argv[1])
+
+
 while True:
     decision = input ("What would you like to do? ")
     if decision == 'show':
@@ -111,8 +117,9 @@ while True:
         export_items_to_csv(items)
     elif decision == 'load':
         print ('Successfully loaded data from magazyn.csv')
-        load_items_from_csv(items)
+        load_items_from_csv(items, 'magazyn.csv')
     elif decision == 'exit':
         print = "Exiting... Bye!"
         break
+
 
