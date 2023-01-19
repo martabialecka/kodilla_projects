@@ -78,6 +78,7 @@ def load_items_from_csv(items, file):
         
         for item in reader:
             item ['unit_price'] = float(item ['unit_price'])
+            item ['quantity'] = int (item ['quantity'])
             items.append(item)
 
 if len(sys.argv) > 1:
