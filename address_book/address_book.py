@@ -41,6 +41,8 @@ def create_contacts (type_of_card, number):
     return new_friends 
 
 test_contacts = create_contacts("BaseContact", 10)
+for item in test_contacts:
+    print (str (item))
 
 by_name = sorted(test_contacts, key=lambda friend: friend.name)
 by_surname = sorted(test_contacts, key=lambda friend: friend.surname)
