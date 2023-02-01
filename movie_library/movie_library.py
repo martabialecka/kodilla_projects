@@ -2,77 +2,83 @@ from faker import Faker
 import random
 
 class Movie:
-    def __init__ (self, title, year, genre):
+    def __init__(self, title, year, genre):
         self.title = title
         self.year = year
         self.genre = genre
         self.play_count = 0
-    def __str__ (self):
+    
+    def __str__(self):
         return f'{self.title} ({self.year})'
-    def play (self):
+    
+    def play(self):
         self.play_count = self.play_count + 1
-        print (str (self))
 
-class Series (Movie):
+class Series(Movie):
     def __init__(self, season, episode, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.season = season
         self.episode = episode
+    
     def __str__(self):
         return "%s S%02dE%02d" % (self.title, self.season, self.episode)
 
-faker = Faker()
+def generate_series_and_moveies(how_many):
+    faker = Faker()
+    
+    genres = ['Comedy', 'Horror', 'Drama', 'Thriller', 'Criminal', 'Fantasy', 'Sci-Fi']
+    
+    movie_list = []
+    
+    for _ in range(how_many):
+        series = random.randint(0, 1)
+        title = faker.word()
+        year = faker.year()
+        genre_index = random.randint(0, len(genres) - 1)
+        genre = genres[genre_index]
+        if series == 0:
+            movie = Movie(title, year, genre)
+            movie_list.append(movie)
+        else:
+            season = random.randint(1, 8)
+            episode = random.randint(1, 99)
+            series = Series(season, episode, title, year, genre)
+            movie_list.append(series)
+    
+    return movie_list
 
-genres = ['Comedy', 'Horror', 'Drama', 'Thriller', 'Criminal', 'Fantasy', 'Sci-Fi']
+movie_list = generate_series_and_moveies(20)
 
-movie_list = []
-
-for _ in range(20):
-    series = random.randint(0, 1)
-    title = faker.word()
-    year = faker.year()
-    genreIndex = random.randint(0, len(genres) - 1)
-    genre = genres[genreIndex]
-    if series == 0:
-        movie = Movie(title, year, genre)
-        movie_list.append(movie)
-    else:
-        season = random.randint(1, 8)
-        episode = random.randint(1, 99)
-        series = Series(season, episode, title, year, genre)
-        movie_list.append(series)
-        pass
-
-def get_movies ():
+def get_movies():
     movies = []
     for movie in movie_list:
         if type(movie) is Movie:
-            movies.append (movie)
+            movies.append(movie)
     movies.sort(key = lambda movie : movie.title)
     return movies
 
-def get_series ():
+def get_series():
     movies = []
     for movie in movie_list:
         if type(movie) is Series:
-            movies.append (movie)
+            movies.append(movie)
     movies.sort(key = lambda movie : movie.title)
     return movies
 
-def search (title):
+def search(title):
     for movie in movie_list:
         if movie.title == title:
             return movie
     return None
 
-def generate_views ():
+def generate_views():
     movie = random.choice(movie_list)
-    random_play_count = random.randint (1,100)
+    random_play_count = random.randint(1,100)
     movie.play_count = movie.play_count + random_play_count
 
-def ten_generate_views ():
+def ten_generate_views():
     for _ in range(10):
-        generate_views ()
+        generate_views()
 
 def top_titles(count, content_type):
     movies = []
