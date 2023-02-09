@@ -1,0 +1,13 @@
+.welcome {
+    border: 20px;
+    background: grey
+}
+.about {
+    color: blue;
+}
+.contact {
+    color: blue;
+}
+h2 {
+    font-size: 22px
+}

@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
+    </head>
+    <body>
+        <h1 class="welcome">Witaj na mojej stronie domowej</h1>
+        <img src="https://ciekawe.org/wp-content/uploads/2016/07/Albert-Einstein--728x506.jpg" width="150" height="100" alt="Albert Einstein wytykający język" title="Albert Einstein">
+        <div id="content">{% block content %}{% endblock %}</div>
+    </body>
+</html>
