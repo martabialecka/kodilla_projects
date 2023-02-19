@@ -5,10 +5,13 @@
     <title>Login Form With Flask WTF</title>
 </head>
 <body>
-
+{% if error %}
+<div> {{ error }}</div>
+{% endif %}
 <form method="POST" action="/login/">
-    {{ form.username.label }}
-    {{ form.username }}
+    {{ form.csrf_token }}
+    {{ form.email.label }}
+    {{ form.email }}
     {{ form.password.label }}
     {{ form.password }}
     <input type="submit" value="Go">
