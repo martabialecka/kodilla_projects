@@ -13,6 +13,13 @@ class HHExpenses:
         return self.data
 
     def get(self, id):
+    todo = [todo for todo in self.all() if todo['id'] == id]
+    if todo:
+        return todo[0]
+    return []
+
+    def get(self, id):
+    todo = [todo for todo in self.all() if todo['id'] == id]
         return self.data[id]
 
     def create(self, data):
