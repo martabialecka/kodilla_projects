@@ -6,4 +6,3 @@ class ExpensesForm(FlaskForm):
     title = StringField('Nazwa', validators=[DataRequired()])
     amount = FloatField('Kwota', validators=[DataRequired()])
     paid = BooleanField ('Zapłacone?')
-    
