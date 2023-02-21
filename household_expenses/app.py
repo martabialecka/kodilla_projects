@@ -57,7 +57,7 @@ def update_expense(expense_id):
     print(request.json)
     if not expense:
         abort(404)
-    if request.json:
+    if not request.json:
         abort(400)
     data = request.json
     if any([
