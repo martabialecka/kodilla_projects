@@ -24,13 +24,25 @@ def get_expenses(expense_id):
 
 @app.route("/api/v1/expenses/", methods=["POST"])
 def create_expenses():
-    if not request.json or not 'title' in request.json:
+    if not request.json:
         abort(400)
+    
+    data = request.json
+
+    if not 'title' in data:
+        abort(400)
+    if not isinstance(data['title'], str):
+        abort(400)
+    if 'amount' in data and not isinstance(data['amount'], float) and not isinstance(data['amount'], int):
+        abort(400)
+    if 'paid' in data and not isinstance(data['paid'], bool):
+        abort(400)
+
     expense = {
         'id': hh_expenses.all()[-1]['id'] + 1 if hh_expenses.all() else 0,
-        'title': request.json['title'],
-        'amount': request.json.get('amount', 0.0),
-        'paid': False
+        'title': data['title'],
+        'amount': float(data.get('amount', 0.0)),
+        'paid': data.get('paid', False)
     }
     hh_expenses.create(expense)
     return jsonify({'expenses': expense}), 201
@@ -58,21 +70,21 @@ def update_expense(expense_id):
         abort(404)
     if not request.json:
         abort(400)
+    
     data = request.json
-    if any([
-        'title' in data and not isinstance(data.get('title'), str),
-        'amount' in data and not isinstance(data.get('amount'), float),
-        'paid' in data and not isinstance(data.get('done'), bool)
-    ]):
+    
+    if 'title' in data and not isinstance(data['title'], str):
         abort(400)
+    if 'amount' in data and not isinstance(data['amount'], float) and not isinstance(data['amount'], int):
+        abort(400)
+    if 'paid' in data and not isinstance(data['paid'], bool):
+        abort(400)
+
     expense = {
+        'id': expense_id,
         'title': data.get('title', expense['title']),
-        'amount': data.get('amount', expense['amount']),
+        'amount': float(data.get('amount', expense['amount'])),
         'paid': data.get('paid', expense['paid'])
     }
     hh_expenses.update(expense_id, expense)
     return jsonify({'expenses': expense})
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
