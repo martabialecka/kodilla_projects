@@ -53,8 +53,7 @@ def delete_expenses(expense_id):
 @app.route("/api/v1/expenses/<int:expense_id>", methods=["PUT"])
 def update_expense(expense_id):
     expense = hh_expenses.get(expense_id)
-    print(request.content_type)
-    print(request.json)
+
     if not expense:
         abort(404)
     if not request.json:
