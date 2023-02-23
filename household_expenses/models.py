@@ -41,5 +41,12 @@ class HHExpenses:
             self.save_all()
             return True
         return False
+    
+    def unpaid_sum (self):
+        result = 0
+        for item in self.data:
+            if not item['paid']:
+                result += item['amount']
+        return result
 
 hh_expenses = HHExpenses()

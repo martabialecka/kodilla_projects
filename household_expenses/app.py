@@ -8,14 +8,14 @@ app.config['SECRET_KEY'] = 'lalala'
 
 @app.route('/api/expenses/', methods=['GET'])
 def get_expenses():
-    return jsonify(hh_expenses.all())
+    return jsonify({'expenses': hh_expenses.all(), 'unpaid' : hh_expenses.unpaid_sum()})
 
 @app.route('/api/expenses/<int:expense_id>', methods=['GET'])
 def get_expense(expense_id):
     expenses = hh_expenses.get(expense_id)
     if not expenses:
         abort(404)
-    return jsonify({'expenses': expenses})
+    return jsonify({'expense': expenses})
 
 @app.route('/api/expenses/', methods=['POST'])
 def create_expense():
@@ -40,7 +40,7 @@ def create_expense():
         'paid': data.get('paid', False)
     }
     hh_expenses.create(expense)
-    return jsonify({'expenses': expense}), 201
+    return jsonify({'expense': expense}), 201
 
 @app.route('/api/expenses/<int:expense_id>', methods=['PUT'])
 def update_expense(expense_id):
@@ -67,7 +67,7 @@ def update_expense(expense_id):
         'paid': data.get('paid', expense['paid'])
     }
     hh_expenses.update(expense_id, expense)
-    return jsonify({'expenses': expense})
+    return jsonify({'expense': expense})
 
 @app.route('/api/expenses/<int:expense_id>', methods=['DELETE'])
 def delete_expense(expense_id):
