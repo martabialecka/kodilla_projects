@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista wydatków w tabeli</title>
+    <style>
+        table, th, tr, td {border: 3px solid pink;}
+    </style>
+</head>
+<body>
+<h2>Lista wydatków</h2>
+
+<table>
+    <thead>
+    <th>Wydatek domowy</th>
+    <th>Kwota</th>
+    <th>Zapłacone?</th>
+    </thead>
+{% for expense in hh_expenses %}
+    <tr>
+        <td><a href="/expenses/{{ expense.id }}">{{ expense.title }}</a></td>
+        <td>{{ expense.amount }}</td>
+        <td>{{ "Tak" if expense.paid else "Nie"}}</td>
+    </tr>
+{% endfor %}
+</table>
+<p>Do zapłaty: <b>{{unpaid_sum}}</b></p>
+<div>
+    <h2> Dodaj nowy wydatek: </h2>
+    <form method="POST" action="/expenses/">
+        {{ form.hidden_tag() }}
+        <table>
+            {% for field in form if field.widget.input_type != 'hidden' %}
+                <tr>
+                    <th>{{ field.label }} {% if field.flags.required %}*{% endif %}</th>
+                    <td>{{ field }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <input type="submit" value="Dodaj">
+    </form>
+</div>
+</body>
+</html>

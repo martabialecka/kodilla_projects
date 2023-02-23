@@ -8,6 +8,11 @@ class HHExpenses:
         except FileNotFoundError:
             self.data = []
 
+    def new_id(self):
+        if self.data:
+            return self.data[-1]['id'] + 1
+        return 0
+
     def save_all(self):
         with open('hh_expenses.json', 'w') as f:
             json.dump(self.data, f)
@@ -22,6 +27,8 @@ class HHExpenses:
         return []
 
     def create(self, new_record):
+        new_record.pop('csrf_token', None)
+        new_record['id'] = self.new_id()
         self.data.append(new_record)
         self.save_all()
 
@@ -29,6 +36,8 @@ class HHExpenses:
         old_record = self.get(id)
         if old_record:
             index = self.data.index(old_record)
+            new_record.pop('csrf_token', None)
+            new_record['id'] = id
             self.data[index] = new_record
             self.save_all()
             return True

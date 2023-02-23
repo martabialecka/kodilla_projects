@@ -2,6 +2,7 @@ from flask import Flask
 from flask import abort, jsonify, make_response, redirect, render_template, url_for
 from flask import request
 from models import hh_expenses
+from forms import ExpensesForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'lalala'
@@ -34,7 +35,6 @@ def create_expense():
         abort(400)
 
     expense = {
-        'id': hh_expenses.all()[-1]['id'] + 1 if hh_expenses.all() else 0,
         'title': data['title'],
         'amount': float(data.get('amount', 0.0)),
         'paid': data.get('paid', False)
@@ -61,7 +61,6 @@ def update_expense(expense_id):
         abort(400)
 
     expense = {
-        'id': expense_id,
         'title': data.get('title', expense['title']),
         'amount': float(data.get('amount', expense['amount'])),
         'paid': data.get('paid', expense['paid'])
@@ -83,3 +82,29 @@ def not_found(error):
 @app.errorhandler(400)
 def bad_request(error):
     return make_response(jsonify({'error': 'Bad request', 'status_code': 400}), 400)
+
+@app.route('/expenses/', methods=['GET', 'POST'])
+def main_page():
+    form = ExpensesForm()
+
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            hh_expenses.create(form.data)
+        return redirect(url_for('main_page'))
+
+    return render_template(                     \
+        'hh_expenses.html',                     \
+        form = form,                            \
+        hh_expenses = hh_expenses.all(),        \
+        unpaid_sum = hh_expenses.unpaid_sum())
+
+@app.route('/expenses/<int:expense_id>/', methods=['GET', 'POST'])
+def details_page(expense_id):
+    expenses = hh_expenses.get(expense_id)
+    form = ExpensesForm(data = expenses)
+
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            hh_expenses.update(expense_id, form.data)
+        return redirect(url_for('main_page'))
+    return render_template('hh_expense.html', form = form, expense_id = expense_id)
