@@ -104,7 +104,9 @@ def details_page(expense_id):
     form = ExpensesForm(data = expenses)
 
     if request.method == 'POST':
-        if form.validate_on_submit():
+        if 'save' in request.form and form.validate_on_submit:
             hh_expenses.update(expense_id, form.data)
+        elif 'delete' in request.form:
+            hh_expenses.delete(expense_id)
         return redirect(url_for('main_page'))
     return render_template('hh_expense.html', form = form, expense_id = expense_id)

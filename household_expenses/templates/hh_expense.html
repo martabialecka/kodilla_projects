@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Szczegóły wydatku</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <h2>Zmień:</h2>
@@ -16,7 +17,9 @@
                 </tr>
             {% endfor %}
         </table>
-        <input type="submit" value="Zapisz">
+        <br>
+        <input type="submit" name="save" value="Zapisz">
+        <input type="submit" name="delete" value="Usuń">
     </form>
 </body>
 </html>

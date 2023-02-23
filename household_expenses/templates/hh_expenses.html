@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Lista wydatków w tabeli</title>
-    <style>
-        table, th, tr, td {border: 3px solid pink;}
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 <h2>Lista wydatków</h2>
@@ -37,6 +35,7 @@
                 </tr>
             {% endfor %}
         </table>
+        <br>
         <input type="submit" value="Dodaj">
     </form>
 </div>
