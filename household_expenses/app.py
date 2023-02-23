@@ -1,29 +1,24 @@
-from flask import Flask, jsonify
-from models import hh_expenses
-
-from flask import abort
-
-from flask import make_response
-
+from flask import Flask
+from flask import make_response, jsonify, render_template, abort
 from flask import request
+from models import hh_expenses
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'lalala'
 
-
-@app.route('/api/v1/expenses/', methods=['GET'])
-def expenses_list_api_v1():
+@app.route('/api/expenses/', methods=['GET'])
+def get_expenses():
     return jsonify(hh_expenses.all())
 
-@app.route('/api/v1/expenses/<int:expense_id>', methods=['GET'])
-def get_expenses(expense_id):
+@app.route('/api/expenses/<int:expense_id>', methods=['GET'])
+def get_expense(expense_id):
     expenses = hh_expenses.get(expense_id)
     if not expenses:
         abort(404)
     return jsonify({'expenses': expenses})
 
-@app.route('/api/v1/expenses/', methods=['POST'])
-def create_expenses():
+@app.route('/api/expenses/', methods=['POST'])
+def create_expense():
     if not request.json:
         abort(400)
     
@@ -47,22 +42,7 @@ def create_expenses():
     hh_expenses.create(expense)
     return jsonify({'expenses': expense}), 201
 
-@app.errorhandler(404)
-def not_found(error):
-    return make_response(jsonify({'error': 'Not found', 'status_code': 404}), 404)
-
-@app.errorhandler(400)
-def bad_request(error):
-    return make_response(jsonify({'error': 'Bad request', 'status_code': 400}), 400)
-
-@app.route('/api/v1/expenses/<int:expense_id>', methods=['DELETE'])
-def delete_expenses(expense_id):
-    result = hh_expenses.delete(expense_id)
-    if not result:
-        abort(404)
-    return jsonify({'result': result})
-
-@app.route('/api/v1/expenses/<int:expense_id>', methods=['PUT'])
+@app.route('/api/expenses/<int:expense_id>', methods=['PUT'])
 def update_expense(expense_id):
     expense = hh_expenses.get(expense_id)
 
@@ -88,3 +68,18 @@ def update_expense(expense_id):
     }
     hh_expenses.update(expense_id, expense)
     return jsonify({'expenses': expense})
+
+@app.route('/api/expenses/<int:expense_id>', methods=['DELETE'])
+def delete_expense(expense_id):
+    result = hh_expenses.delete(expense_id)
+    if not result:
+        abort(404)
+    return jsonify({'result': result})
+
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found', 'status_code': 404}), 404)
+
+@app.errorhandler(400)
+def bad_request(error):
+    return make_response(jsonify({'error': 'Bad request', 'status_code': 400}), 400)
