@@ -4,7 +4,7 @@ import json
 class HHExpenses:
     def __init__(self):
         try:
-            with open("hh_expenses.json", "r") as f:
+            with open('hh_expenses.json', 'r') as f:
                 self.data = json.load(f)
         except FileNotFoundError:
             self.data = []
@@ -23,7 +23,7 @@ class HHExpenses:
         self.save_all()
 
     def save_all(self):
-        with open("hh_expenses.json", "w") as f:
+        with open('hh_expenses.json', 'w') as f:
             json.dump(self.data, f)
 
     def update(self, id, data):

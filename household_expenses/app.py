@@ -8,21 +8,21 @@ from flask import make_response
 from flask import request
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "lalala"
+app.config['SECRET_KEY'] = 'lalala'
 
 
-@app.route("/api/v1/expenses/", methods=["GET"])
+@app.route('/api/v1/expenses/', methods=['GET'])
 def expenses_list_api_v1():
     return jsonify(hh_expenses.all())
 
-@app.route("/api/v1/expenses/<int:expense_id>", methods=["GET"])
+@app.route('/api/v1/expenses/<int:expense_id>', methods=['GET'])
 def get_expenses(expense_id):
     expenses = hh_expenses.get(expense_id)
     if not expenses:
         abort(404)
-    return jsonify({"expenses": expenses})
+    return jsonify({'expenses': expenses})
 
-@app.route("/api/v1/expenses/", methods=["POST"])
+@app.route('/api/v1/expenses/', methods=['POST'])
 def create_expenses():
     if not request.json:
         abort(400)
@@ -55,14 +55,14 @@ def not_found(error):
 def bad_request(error):
     return make_response(jsonify({'error': 'Bad request', 'status_code': 400}), 400)
 
-@app.route("/api/v1/expenses/<int:expense_id>", methods=['DELETE'])
+@app.route('/api/v1/expenses/<int:expense_id>', methods=['DELETE'])
 def delete_expenses(expense_id):
     result = hh_expenses.delete(expense_id)
     if not result:
         abort(404)
     return jsonify({'result': result})
 
-@app.route("/api/v1/expenses/<int:expense_id>", methods=["PUT"])
+@app.route('/api/v1/expenses/<int:expense_id>', methods=['PUT'])
 def update_expense(expense_id):
     expense = hh_expenses.get(expense_id)
 
