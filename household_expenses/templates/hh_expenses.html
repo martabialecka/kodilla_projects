@@ -16,7 +16,7 @@
     </thead>
 {% for expense in hh_expenses %}
     <tr>
-        <td><a href="/expenses/{{ expense.id }}">{{ expense.title }}</a></td>
+        <td><a href="/expenses/{{ expense.id }}">{{ expense.name }}</a></td>
         <td>{{ expense.amount }}</td>
         <td>{{ "Tak" if expense.paid else "Nie"}}</td>
     </tr>

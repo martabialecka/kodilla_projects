@@ -25,9 +25,9 @@ def create_expense():
     
     data = request.json
 
-    if not 'title' in data:
+    if not 'name' in data:
         abort(400)
-    if not isinstance(data['title'], str):
+    if not isinstance(data['name'], str):
         abort(400)
     if 'amount' in data and not isinstance(data['amount'], float) and not isinstance(data['amount'], int):
         abort(400)
@@ -35,7 +35,7 @@ def create_expense():
         abort(400)
 
     expense = {
-        'title': data['title'],
+        'name': data['name'],
         'amount': float(data.get('amount', 0.0)),
         'paid': data.get('paid', False)
     }
@@ -53,7 +53,7 @@ def update_expense(expense_id):
     
     data = request.json
     
-    if 'title' in data and not isinstance(data['title'], str):
+    if 'name' in data and not isinstance(data['name'], str):
         abort(400)
     if 'amount' in data and not isinstance(data['amount'], float) and not isinstance(data['amount'], int):
         abort(400)
@@ -61,7 +61,7 @@ def update_expense(expense_id):
         abort(400)
 
     expense = {
-        'title': data.get('title', expense['title']),
+        'name': data.get('name', expense['name']),
         'amount': float(data.get('amount', expense['amount'])),
         'paid': data.get('paid', expense['paid'])
     }
