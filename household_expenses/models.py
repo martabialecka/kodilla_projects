@@ -15,7 +15,7 @@ class HHExpenses:
 
     def save_all(self):
         with open('hh_expenses.json', 'w') as f:
-            json.dump(self.data, f, default=str)
+            json.dump(self.data, f)
 
     def all(self):
         return self.data
