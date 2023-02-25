@@ -29,6 +29,7 @@ class HHExpenses:
     def create(self, new_record):
         new_record.pop('csrf_token', None)
         new_record['id'] = self.new_id()
+        new_record['amount'] = float(new_record['amount'])
         self.data.append(new_record)
         self.save_all()
 
@@ -38,6 +39,7 @@ class HHExpenses:
             index = self.data.index(old_record)
             new_record.pop('csrf_token', None)
             new_record['id'] = id
+            new_record['amount'] = float(new_record['amount'])
             self.data[index] = new_record
             self.save_all()
             return True
