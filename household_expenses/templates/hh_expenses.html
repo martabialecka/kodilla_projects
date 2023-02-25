@@ -17,12 +17,12 @@
 {% for expense in hh_expenses %}
     <tr>
         <td><a href="/expenses/{{ expense.id }}">{{ expense.name }}</a></td>
-        <td>{{ '%.2f' % expense.amount }}</td>
+        <td>{{ form.get_float_string(expense.amount) }}</td>
         <td>{{ "Tak" if expense.paid else "Nie"}}</td>
     </tr>
 {% endfor %}
 </table>
-<p>Do zapłaty: <b>{{ '%.2f' % unpaid_sum }}</b></p>
+<p>Do zapłaty: <b>{{ form.get_float_string(unpaid_sum) }}</b></p>
 <div>
     <h2> Dodaj nowy wydatek: </h2>
     <form method="POST" action="/expenses/">
