@@ -1,5 +1,10 @@
 import json
 
+def prepare_new_record(new_record, id):
+    new_record.pop('csrf_token', None)
+    new_record['id'] = id
+    new_record['amount'] = float(new_record['amount'])
+
 class HHExpenses:
     def __init__(self):
         try:
@@ -27,9 +32,7 @@ class HHExpenses:
         return []
 
     def create(self, new_record):
-        new_record.pop('csrf_token', None)
-        new_record['id'] = self.new_id()
-        new_record['amount'] = float(new_record['amount'])
+        prepare_new_record(new_record, self.new_id())
         self.data.append(new_record)
         self.save_all()
 
@@ -37,9 +40,7 @@ class HHExpenses:
         old_record = self.get(id)
         if old_record:
             index = self.data.index(old_record)
-            new_record.pop('csrf_token', None)
-            new_record['id'] = id
-            new_record['amount'] = float(new_record['amount'])
+            prepare_new_record(new_record, id)
             self.data[index] = new_record
             self.save_all()
             return True
