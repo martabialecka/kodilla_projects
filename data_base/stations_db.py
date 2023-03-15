@@ -53,8 +53,16 @@ with open('clean_stations.csv', 'r') as csvfile:
     ins = stations.insert()
     conn.execute(ins, list(reader))
 
+measure_list = []
 with open('clean_measure.csv', 'r') as csvfile:
     reader = csv.DictReader(csvfile)
-    ins = measures.insert()
     for row in reader:
-        conn.execute(ins.values(station = row['station'], date = date.fromisoformat(row['date']), precip = row['precip'], tobs = row['tobs']))
+        measure_list.append({
+            'station': row['station'],
+            'date': date.fromisoformat(row['date']),
+            'precip': float(row['precip']),
+            'tobs': int(row['tobs'])
+            })
+    
+ins = measures.insert()
+conn.execute(ins, measure_list)
