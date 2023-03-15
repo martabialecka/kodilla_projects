@@ -43,6 +43,10 @@ measures = Table(
 )
 meta.create_all(engine)
 
+conn = engine.connect()
+conn.execute(countries.insert().values(code = 'US', name = 'United States of America'))
+conn.execute(states.insert().values(code = 'HI', country = 'US', name = 'Hawaii'))
+
 with open('clean_stations.csv', 'r') as csvfile:
     reader = csv.DictReader(csvfile)
     print(reader.fieldnames)
