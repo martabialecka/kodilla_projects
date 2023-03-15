@@ -66,3 +66,7 @@ with open('clean_measure.csv', 'r') as csvfile:
     
 ins = measures.insert()
 conn.execute(ins, measure_list)
+
+test = conn.execute("SELECT * FROM stations LIMIT 5").fetchall()
+print(test)
+
