@@ -1,4 +1,14 @@
 import json
+from app import db
+
+class Expense(db.Model):
+   id = db.Column(db.Integer, primary_key = True)
+   name = db.Column(db.String, index = True)
+   amount = db.Column(db.Float)
+   paid = db.Column(db.Boolean)
+
+   def __str__(self):
+       return f"<Expense {self.name}>"
 
 def prepare_new_record(new_record, id):
     new_record.pop('csrf_token', None)

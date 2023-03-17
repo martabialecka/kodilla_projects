@@ -1,7 +1,8 @@
+"""
 from flask import Flask
 from flask import abort, jsonify, make_response, redirect, render_template, url_for
 from flask import request
-from models import hh_expenses
+from app.models import hh_expenses
 from forms import ExpensesForm
 
 app = Flask(__name__)
@@ -110,3 +111,4 @@ def details_page(expense_id):
             hh_expenses.delete(expense_id)
         return redirect(url_for('main_page'))
     return render_template('hh_expense.html', form = form, expense_id = expense_id)
+"""
