@@ -2,13 +2,18 @@ import json
 from app import db
 
 class Expense(db.Model):
-   id = db.Column(db.Integer, primary_key = True)
-   name = db.Column(db.String, index = True)
-   amount = db.Column(db.Float)
-   paid = db.Column(db.Boolean)
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String, index = True)
+    amount = db.Column(db.Float)
+    paid = db.Column(db.Boolean)
 
-   def __str__(self):
-       return f"<Expense {self.name}>"
+    def __init__(self, new_record):
+        for key in new_record:
+            if key != 'id':
+                setattr(self, key, new_record[key])
+
+    def __str__(self):
+        return f"<Expense {self.name}>"
 
 def prepare_new_record(new_record, id):
     new_record.pop('csrf_token', None)
@@ -46,6 +51,10 @@ class HHExpenses:
         new_record = prepare_new_record(new_record, self.new_id())
         self.data.append(new_record)
         self.save_all()
+        ###
+        e = Expense(new_record)
+        db.session.add(e)
+        db.session.commit()
 
     def update(self, id, new_record):
         old_record = self.get(id)
