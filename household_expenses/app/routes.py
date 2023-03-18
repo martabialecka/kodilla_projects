@@ -1,12 +1,8 @@
-"""
-from flask import Flask
-from flask import abort, jsonify, make_response, redirect, render_template, url_for
-from flask import request
-from app.models import hh_expenses
-from forms import ExpensesForm
+from app import app
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'lalala'
+from flask import abort, jsonify, make_response, redirect, render_template, url_for, request
+from app.models import hh_expenses
+from app.forms import ExpensesForm
 
 @app.route('/api/expenses/', methods=['GET'])
 def get_expenses():
@@ -111,4 +107,3 @@ def details_page(expense_id):
             hh_expenses.delete(expense_id)
         return redirect(url_for('main_page'))
     return render_template('hh_expense.html', form = form, expense_id = expense_id)
-"""
