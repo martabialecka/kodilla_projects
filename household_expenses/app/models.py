@@ -1,5 +1,8 @@
 import json
-from app import db
+from app import db, app
+from sqlalchemy import Integer
+from sqlalchemy.sql import func
+from sqlalchemy.sql.expression import cast, not_
 
 class Expense(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -15,48 +18,37 @@ class Expense(db.Model):
     def to_dict(self):
         return {k: v for k, v in vars(self).items() if not k.startswith('_')}
 
-def prepare_new_record(new_record, id):
+def prepare_new_record(new_record):
     new_record.pop('csrf_token', None)
-    new_record['id'] = id
     new_record['amount'] = float(new_record['amount'])
     return new_record
 
 class HHExpenses:
     def __init__(self):
-        try:
-            with open('hh_expenses.json', 'r') as f:
-                self.data = json.load(f)
-        except FileNotFoundError:
-            self.data = []
+        with app.app_context():
+            self.query = Expense.query
 
-    def new_id(self):
-        if self.data:
-            return self.data[-1]['id'] + 1
-        return 0
-
-    def save_all(self):
-        with open('hh_expenses.json', 'w') as f:
-            json.dump(self.data, f)
+            # not paid sum = sum(amount * not paid)
+            self.query_sum = db.session.query(func.sum(Expense.amount * cast(not_(Expense.paid), Integer)))
 
     def all(self):
-        return [e.to_dict() for e in Expense.query.all()]
+        return [e.to_dict() for e in self.query.all()]
 
     def get(self, id):
-        e = Expense.query.get(id)
+        e = self.query.get(id)
         if e is not None:
             return e.to_dict()
         return []
 
     def create(self, new_record):
-        new_record = prepare_new_record(new_record, self.new_id())
-        self.data.append(new_record)
-        self.save_all()
-        ###
+        new_record = prepare_new_record(new_record)
         e = Expense(new_record)
         db.session.add(e)
         db.session.commit()
 
     def update(self, id, new_record):
+        return False
+    """
         old_record = self.get(id)
         if old_record:
             index = self.data.index(old_record)
@@ -65,20 +57,20 @@ class HHExpenses:
             self.save_all()
             return True
         return False
+    """
 
     def delete(self, id):
+        return False
+    """
         record = self.get(id)
         if record:
             self.data.remove(record)
             self.save_all()
             return True
         return False
-    
+    """
+
     def unpaid_sum (self):
-        result = 0
-        for item in self.data:
-            if not item['paid']:
-                result += item['amount']
-        return result
+        return self.query_sum.all()[0][0]
 
 hh_expenses = HHExpenses()
