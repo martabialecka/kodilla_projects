@@ -58,15 +58,12 @@ class HHExpenses:
         return False
 
     def delete(self, id):
-        return False
-    """
-        record = self.get(id)
-        if record:
-            self.data.remove(record)
-            self.save_all()
+        record = Expense.query.get(id)
+        if record is not None:
+            db.session.delete(record)
+            db.session.commit()
             return True
         return False
-    """
 
     def unpaid_sum (self):
         return self.query_sum.all()[0][0]
