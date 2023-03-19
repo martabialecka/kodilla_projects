@@ -11,9 +11,9 @@ class Expense(db.Model):
         for key in new_record:
             if key != 'id':
                 setattr(self, key, new_record[key])
-
-    def __str__(self):
-        return f"<Expense {self.name}>"
+    
+    def to_dict(self):
+        return {k: v for k, v in vars(self).items() if not k.startswith('_')}
 
 def prepare_new_record(new_record, id):
     new_record.pop('csrf_token', None)
@@ -39,7 +39,7 @@ class HHExpenses:
             json.dump(self.data, f)
 
     def all(self):
-        return self.data
+        return [e.to_dict() for e in Expense.query.all()]
 
     def get(self, id):
         for record in self.data:
