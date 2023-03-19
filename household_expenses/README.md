@@ -1,5 +1,8 @@
 To run the "Household expenses", install python 3.x and execute
-`pip install -r requirements.txt`
+
+```
+pip install -r requirements.txt
+```
 
 From `household_expenses` directory execute
 
