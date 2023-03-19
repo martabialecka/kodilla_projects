@@ -23,3 +23,9 @@ Body of POST and PUT requests must be in JSON form:
 }
 
 The app can be used with a web browser at address http://localhost:5000/expenses
+
+There is a possibility of data base manipulation from Python command line. Execute
+
+flask shell
+
+The shell gives db object of class SQLAlchemy and Expense class derived from db.Model. For full Expense definition go to app/models.py file.

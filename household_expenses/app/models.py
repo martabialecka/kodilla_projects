@@ -66,6 +66,7 @@ class HHExpenses:
         return False
 
     def unpaid_sum (self):
-        return self.query_sum.all()[0][0]
+        sum =  self.query_sum.all()[0][0]
+        return sum if sum is not None else 0
 
 hh_expenses = HHExpenses()
