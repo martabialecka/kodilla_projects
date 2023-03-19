@@ -42,9 +42,9 @@ class HHExpenses:
         return [e.to_dict() for e in Expense.query.all()]
 
     def get(self, id):
-        for record in self.data:
-            if record['id'] == id:
-                return record
+        e = Expense.query.get(id)
+        if e is not None:
+            return e.to_dict()
         return []
 
     def create(self, new_record):
