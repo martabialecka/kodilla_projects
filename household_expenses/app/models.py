@@ -11,10 +11,13 @@ class Expense(db.Model):
     paid = db.Column(db.Boolean)
 
     def __init__(self, new_record):
-        for key in new_record:
-            if key != 'id':
-                setattr(self, key, new_record[key])
+        self.from_dict(new_record)
     
+    def from_dict(self, d):
+        for key in d:
+            if key != 'id':
+                setattr(self, key, d[key])
+
     def to_dict(self):
         return {k: v for k, v in vars(self).items() if not k.startswith('_')}
 
@@ -26,16 +29,14 @@ def prepare_new_record(new_record):
 class HHExpenses:
     def __init__(self):
         with app.app_context():
-            self.query = Expense.query
-
             # not paid sum = sum(amount * not paid)
             self.query_sum = db.session.query(func.sum(Expense.amount * cast(not_(Expense.paid), Integer)))
 
     def all(self):
-        return [e.to_dict() for e in self.query.all()]
+        return [e.to_dict() for e in Expense.query.all()]
 
     def get(self, id):
-        e = self.query.get(id)
+        e = Expense.query.get(id)
         if e is not None:
             return e.to_dict()
         return []
@@ -47,17 +48,14 @@ class HHExpenses:
         db.session.commit()
 
     def update(self, id, new_record):
-        return False
-    """
-        old_record = self.get(id)
-        if old_record:
-            index = self.data.index(old_record)
-            new_record = prepare_new_record(new_record, id)
-            self.data[index] = new_record
-            self.save_all()
+        record = Expense.query.get(id)
+        if record is not None:
+            new_record = prepare_new_record(new_record)
+            record.from_dict(new_record)
+            db.session.add(record)
+            db.session.commit()
             return True
         return False
-    """
 
     def delete(self, id):
         return False
